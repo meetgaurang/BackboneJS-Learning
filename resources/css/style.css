@@ -1,0 +1,35 @@
+.container{
+    font-family:Calibri, Helvetica, serif;
+    color:#444;
+    width:380px;
+    margin:100px auto 0;
+    padding:30px;
+    border:1px solid #ddd;
+    background:#f6f6f6;
+    -webkit-border-radius:4px;
+       -moz-border-radius:4px;
+            border-radius:4px;
+}
+ 
+h1, nav{
+    text-align:center;
+    margin:0 0 20px;
+}
+
+.user-item-class{
+	background-color: rgb(221, 221, 221);
+	margin-bottom: 5px;
+}
+
+.delete-student-item{
+	float: left;
+	padding: 0px 6px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: gray;
+	cursor:pointer;
+}
+
+td,th{
+	padding-left: 20px;
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>BackboneJS Example App</title>
+	<link rel="stylesheet" href="resources/css/style.css">
+	<script src="lib/jquery-2.0.3.js"></script>
+	<script src="lib/underscore.js"></script>
+	<script src="lib/backbone.1.1.0.js"></script>
+	<script src="lib/jquerymx-3.2.custom.js"></script>
+	<script>
+		$(document).ready(function(){
+			var self = this;
+
+//Fixture Configuration starts
+			$.fixture.on = true;
+			if($.fixture.on){
+				$.fixture("student","fixtures/student.json");
+			}
+			if($.fixture.on){
+				$.fixture("students","fixtures/students.json");
+			}
+//Fixture Configuration ends
+
+// Model and Collection declaration starts
+			var Student = Backbone.Model.extend({
+				  // We can pass it default values.
+				  defaults : {
+				  	id : null,
+					name : null,
+					city : false,
+					admissionYear : false
+				  },
+				  url : 'student'
+			});
+			var Students = Backbone.Collection.extend({
+				model : Student,
+				url : 'students'
+			});
+// Model and Collection declaration ends
+
+
+//Backbone View declaration for Model and Collection starts
+			this.studentView = Backbone.View.extend({
+				tagName: 'tr',
+
+				events: {
+					'click [data-action="delte-student"]':  'deleteStudent',
+    			},
+
+				render : function(eventName){
+					$(this.el).html( '<td data-id="id">'+this.model.get('id')+'</td>'
+									+'<td>'+this.model.get('name')+'</td>'
+									+'<td>'+this.model.get('city')+'</td>'
+									+'<td>'+this.model.get('admissionYear')+'</td>'
+									+'<td>'+'<span data-action="delte-student" class="delete-student-item">x</span>'+'</td>'
+					);
+					return this;
+				},
+
+				deleteStudent : function(student){
+					alert("Hook to delete user with ID: "+this.$('[data-id=id]').text());
+				}
+			});
+
+			this.studentCollectionView = Backbone.View.extend({
+				el: $('#studentsList'),
+
+				render : function(eventName){
+					var that = this;
+					_.each(this.collection.models, function(eachStudent){
+						var eachStudentView = new self.studentView({model: eachStudent});
+						$(that.el).append(eachStudentView.render().el);
+					});
+				}
+			});
+//Backbone View declaration for Model and Collection ends
+
+// Let's get stone rolling.. Do Collection.Fetch which eventually renders the list
+			this.newStudents = new Students();
+  			this.newStudents.fetch({
+				success: function(){
+					var studentListView = new self.studentCollectionView({collection : self.newStudents});
+					studentListView.render();
+				}
+  			});
+		});
+	</script>
+</head>
+<body>
+	<div data-type='bodyContainer' class='container'>
+		<div data-role='page' class='page'>
+			<table>
+				    <thead>
+				        <tr>
+							<th>Id</th>
+							<th>Name</th>
+							<th>City</th>
+							<th>Admission Year</th>
+							<th>Operations</th>
+				        </tr>
+    				</thead>
+    				<tbody id='studentsList'>
+    				</tbody>
+			</table>
+		</div>
+	</div>
+</body>
+</html>
